@@ -30,6 +30,7 @@ sum_sq_deviations
 plot(sum_sq_deviations)
 
 ```
+
 Confidence: 0
 
 2. Write a custom R function for any one of the following descriptive statistics: median, mode, standard deviation, variance. Demonstrate that it produces the same value as the base R function given some set of numbers.
@@ -127,6 +128,3 @@ ggplot(mean_hle, aes(x = year, y = mean_healthy))+
 ```
 
 Confidence: 0
-
-
-
