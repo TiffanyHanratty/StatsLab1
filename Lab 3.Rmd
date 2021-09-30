@@ -2,7 +2,9 @@
 title: "Lab 3"
 author: "Tiffany Hanratty"
 date: "9/29/2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -83,7 +85,7 @@ summarized_data <- my_data %>%
   group_by(samples) %>%
   summarize(sample_means = mean(observations))
 
-sim_sample_means[i] <- (mean(summarized_data$sample_means))
+sim_sample_means[i] <- mean(summarized_data$sample_means)
 }
 
 sim_data <- data.frame(sample_size, sim_sample_means)
@@ -111,24 +113,24 @@ sample_sizes <- c(2,5,10,50,100)
 sim_sample_sd <- c()
 sim_sample_sd_N <- c()
 for(i in 1:length(sample_sizes)){
-  observations <- rnorm(sample_sizes[i]*10000, mean = 10, sd =5)
-samples <- rep(1:10000, each = sample_sizes[i])
-my_data <- data.frame(samples,observations)
+  observations <- rnorm(sample_sizes[i]*10000,mean = 10, sd = 5)
+  samples <- rep(1:10000, each = sample_sizes[i])
+  my_data <- data.frame(samples,observations)
 
 summarized_data <- my_data %>%
   group_by(samples) %>%
   summarize(sample_sd = sd(observations),
-            sample_N = sd(observations))
+            sample_sd_N = sd(observations))
 
-sim_sample_sd[i] <- (mean(summarized_data$sample_sd))
-sim_sample_sd_N[i] <- (mean(summarized_data$sample_sd_N))
+sim_sample_sd[i] <- mean(summarized_data$sample_sd)
+sim_sample_sd_N[i] <- mean(summarized_data$sample_sd_N)
 }
 
 sim_data <- data.frame(n = rep(sample_sizes,2),
                        est = c(sim_sample_sd_N, sim_sample_sd),
-                       formula =c(rep("N", 5), rep("N-1", 5)))
+                       formula =c(rep("N",5), rep("N-1",5)))
 
-ggplot(sim_data, aes(x=n, y=est, group=formula, color = formula))+
+ggplot(sim_data, aes(x=n, y=est, group=formula, color=formula))+
          geom_point()+
          geom_line() +
   coord_cartesian(ylim = c(0,10) )
