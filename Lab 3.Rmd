@@ -27,7 +27,7 @@ library(ggplot2)
 ggplot(means, aes(x = samples, y = sample_mean))+
   geom_bar(stat="identity")
 ```
-
+Confidence:10
 
 2. Additionally calculate the standard deviation of each sample from above. Use the standard deviations for error bars, and produce another graph with the means along with error bars using ggplot2. (1 point)
 
@@ -49,6 +49,7 @@ ggplot(means, aes(x = samples, y = sample_mean)) +
                 width = .25)
           
 ```
+Confidence:5
 
 The last two problems concern the concept of using a sample to estimate a property of the population or distribution the sample came from. For example, if we know the mean of a sample, can we be confident that the population has the same mean? If we were trying to guess at the population mean, what statistics from the sample should we use?
 
@@ -61,44 +62,39 @@ Some sample statistics are “biased”, and may systematically under or overest
 - Show the mean of the sample means for each sample size.
 
 ```{r}
-observations <- rnorm(2*10000, mean=10, sd=5)
-samples <- rep(1:10000, each=2)
+observations <- rnorm(n = 2*10000, mean = 10, sd = 5)
+samples <- rep(1:10000, each = 2)
 my_data <- data.frame(samples,observations)
 
 summarized_data <- my_data %>%
   group_by(samples) %>%
-  summarize(sample_mean = mean(observations))
+  summarize(sample_means = mean(observations))
 
 mean(summarized_data$sample_means)
 
-observations <- rnorm(5*10000, mean=10, sd=5)
-samples <- rep(1:10000, each=5)
+sample_sizes <- c(2,5,10,50,100)
+sim_sample_means <- c()
+for(i in 1:length(sample_sizes)){
+  observations <- rnorm(sample_sizes[i]*10000, mean = 10, sd =5)
+samples <- rep(1:10000, each = sample_sizes[i])
 my_data <- data.frame(samples,observations)
 
 summarized_data <- my_data %>%
   group_by(samples) %>%
-  summarize(sample_mean = mean(observations))
+  summarize(sample_means = mean(observations))
 
-mean(summarized_data$sample_means)
-
-
-sample_size <- c(2,5,10,50,10)
-for(n in sample_sizes){
-  observations <- rnorm(n*10000,mean = 10, sd =5)
-  samples <- rep(1:10000, each = n)
-  my_data <- data.frame(samples,observations)
-  
-  summarized_data <- my_data %>%
-    group_by(samples) %>%
-    summarize(sample_means = mean(observation))
-  
-  print(nean(summarized_data$sample_means))
-  
+sim_sample_means[i] <- (mean(summarized_data$sample_means))
 }
 
+sim_data <- data.frame(sample_size, sim_sample_means)
+
+ggplot(sim_data, aes(x=sample_sizes, y=sim_sample_means, group=1))+
+         geom_point()+
+         geom_line() +
+  coord_cartesian(ylim = c(0,20) )
 
 ```
-
+Confidence:0
 
 4. Use a monte carlo simulation to compare the standard deviation formulas (divide by N vs N-1), and show that the N-1 formula is a better unbiased estimate of the population standard deviation, especially for small n. (2 points)
 - Use the same normal distribution and samples sizes from above
@@ -107,5 +103,35 @@ for(n in sample_sizes){
 - Which of the standard deviations is more systematically biased? That is, which one is systematically worse at estimating the population standard deviation?
 
 ```{r}
+sd_N <- function(x){
+  sqrt(sum((mean(x)-x)^2) / length(x))
+}
+
+sample_sizes <- c(2,5,10,50,100)
+sim_sample_sd <- c()
+sim_sample_sd_N <- c()
+for(i in 1:length(sample_sizes)){
+  observations <- rnorm(sample_sizes[i]*10000, mean = 10, sd =5)
+samples <- rep(1:10000, each = sample_sizes[i])
+my_data <- data.frame(samples,observations)
+
+summarized_data <- my_data %>%
+  group_by(samples) %>%
+  summarize(sample_sd = sd(observations),
+            sample_N = sd(observations))
+
+sim_sample_sd[i] <- (mean(summarized_data$sample_sd))
+sim_sample_sd_N[i] <- (mean(summarized_data$sample_sd_N))
+}
+
+sim_data <- data.frame(n = rep(sample_sizes,2),
+                       est = c(sim_sample_sd_N, sim_sample_sd),
+                       formula =c(rep("N", 5), rep("N-1", 5)))
+
+ggplot(sim_data, aes(x=n, y=est, group=formula, color = formula))+
+         geom_point()+
+         geom_line() +
+  coord_cartesian(ylim = c(0,10) )
 
 ```
+Confidence:0
