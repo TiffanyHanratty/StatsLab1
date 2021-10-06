@@ -174,13 +174,179 @@ pre code {
 <ol style="list-style-type: decimal">
 <li>Estimate the letter occurrence probabilities of all 26 letters in English by measuring a paragraph of English text from wikipedia. (hint use strsplit() to split a paragraph into individual letters) (1 point).</li>
 </ol>
-<p>my_paragraph &lt;- “This is a paragraph, with some stuff in it. This is another sentence in the paragraph” the_letters &lt;- unlist(strsplit(my_paragraph, split=&quot;“)) the_letters #&gt; [1]”T&quot; “h” “i” “s” &quot; &quot; “i” “s” &quot; &quot; “a” &quot; &quot; “p” “a” “r” “a” “g” “r” “a” “p” “h” #&gt; [20] “,” &quot; &quot; “w” “i” “t” “h” &quot; &quot; “s” “o” “m” “e” &quot; &quot; “s” “t” “u” “f” “f” &quot; &quot; “i” #&gt; [39] “n” &quot; &quot; “i” “t” “.” &quot; &quot; “T” “h” “i” “s” &quot; &quot; “i” “s” &quot; &quot; “a” “n” “o” “t” “h” #&gt; [58] “e” “r” &quot; &quot; “s” “e” “n” “t” “e” “n” “c” “e” &quot; &quot; “i” “n” &quot; &quot; “t” “h” “e” &quot; &quot; #&gt; [77] “p” “a” “r” “a” “g” “r” “a” “p” “h”</p>
+<pre class="r"><code>Wikipedia &lt;- &quot;The Long Island Tercentenary half dollar is a commemorative coin struck by the United States Bureau of the Mint in 1936. The obverse (pictured) depicts a male Dutch settler and an Algonquian tribesman, and the reverse shows a Dutch sailing ship. It was designed by Howard Weinman, son of Mercury dime designer Adolph A. Weinman. The Long Island Tercentenary Committee wanted a coin to mark the 300th anniversary of the first European settlement there. The authorizing bill passed through Congress without opposition, but was amended in the Senate to add protections against past commemorative coin abuses, such as low mintages or a multiplicity of varieties. The coins were not struck until August 1936, too late for the anniversary celebrations. Four-fifths of the 100,000 coins sent to the Tercentenary Committee were sold, despite a lack of advertising. The half dollar now catalogues up to the low hundreds of dollars. &quot;
+
+wiki_letters &lt;- unlist(strsplit(Wikipedia, split = &quot;&quot;))
+lower_case &lt;- tolower(wiki_letters)
+letter_counts &lt;- table(lower_case)
+letter_counts &lt;- data.frame(letter_counts)
+
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>final &lt;- letter_counts %&gt;%
+  filter(lower_case %in% letters == TRUE)
+
+total_letters &lt;- sum(final$Freq)
+
+final &lt;- final %&gt;%
+  mutate(probabilities = Freq/total_letters)
+
+knitr::kable(final)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">lower_case</th>
+<th align="right">Freq</th>
+<th align="right">probabilities</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">a</td>
+<td align="right">61</td>
+<td align="right">0.0825440</td>
+</tr>
+<tr class="even">
+<td align="left">b</td>
+<td align="right">9</td>
+<td align="right">0.0121786</td>
+</tr>
+<tr class="odd">
+<td align="left">c</td>
+<td align="right">26</td>
+<td align="right">0.0351827</td>
+</tr>
+<tr class="even">
+<td align="left">d</td>
+<td align="right">29</td>
+<td align="right">0.0392422</td>
+</tr>
+<tr class="odd">
+<td align="left">e</td>
+<td align="right">89</td>
+<td align="right">0.1204330</td>
+</tr>
+<tr class="even">
+<td align="left">f</td>
+<td align="right">14</td>
+<td align="right">0.0189445</td>
+</tr>
+<tr class="odd">
+<td align="left">g</td>
+<td align="right">14</td>
+<td align="right">0.0189445</td>
+</tr>
+<tr class="even">
+<td align="left">h</td>
+<td align="right">33</td>
+<td align="right">0.0446549</td>
+</tr>
+<tr class="odd">
+<td align="left">i</td>
+<td align="right">52</td>
+<td align="right">0.0703654</td>
+</tr>
+<tr class="even">
+<td align="left">k</td>
+<td align="right">4</td>
+<td align="right">0.0054127</td>
+</tr>
+<tr class="odd">
+<td align="left">l</td>
+<td align="right">30</td>
+<td align="right">0.0405954</td>
+</tr>
+<tr class="even">
+<td align="left">m</td>
+<td align="right">22</td>
+<td align="right">0.0297700</td>
+</tr>
+<tr class="odd">
+<td align="left">n</td>
+<td align="right">55</td>
+<td align="right">0.0744249</td>
+</tr>
+<tr class="even">
+<td align="left">o</td>
+<td align="right">55</td>
+<td align="right">0.0744249</td>
+</tr>
+<tr class="odd">
+<td align="left">p</td>
+<td align="right">13</td>
+<td align="right">0.0175913</td>
+</tr>
+<tr class="even">
+<td align="left">q</td>
+<td align="right">1</td>
+<td align="right">0.0013532</td>
+</tr>
+<tr class="odd">
+<td align="left">r</td>
+<td align="right">45</td>
+<td align="right">0.0608931</td>
+</tr>
+<tr class="even">
+<td align="left">s</td>
+<td align="right">52</td>
+<td align="right">0.0703654</td>
+</tr>
+<tr class="odd">
+<td align="left">t</td>
+<td align="right">79</td>
+<td align="right">0.1069012</td>
+</tr>
+<tr class="even">
+<td align="left">u</td>
+<td align="right">25</td>
+<td align="right">0.0338295</td>
+</tr>
+<tr class="odd">
+<td align="left">v</td>
+<td align="right">8</td>
+<td align="right">0.0108254</td>
+</tr>
+<tr class="even">
+<td align="left">w</td>
+<td align="right">13</td>
+<td align="right">0.0175913</td>
+</tr>
+<tr class="odd">
+<td align="left">y</td>
+<td align="right">9</td>
+<td align="right">0.0121786</td>
+</tr>
+<tr class="even">
+<td align="left">z</td>
+<td align="right">1</td>
+<td align="right">0.0013532</td>
+</tr>
+</tbody>
+</table>
+<p>Confidence:</p>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Generate “random” strings of letters that are sampled from a distribution where letter occurrence probability is the same as natural English. Use the probabilities for each letter from this wikipedia article, or use your own estimates from the previous question (2 points).</p></li>
-<li><p>Generate a random walk of 10,000 steps. In a random walk, you are simulating the process of randomly taking a step up or down, as if you are on an infinite staircase. At each step you flip a coin. If you get heads you go up one step, if you get tails you go down one step. Start on step 0, then simulate a random walk for 10,000 steps. Your vector should preserve the step number for each step. For example, if the the first three steps were all heads, then the vector would begin with 0,1,2,3, which indicates a single step up each time. Plot the first 1,000 steps. (1 point)</p></li>
-<li><p>What was the most positive and most negative step reached out of 10,000? (1 point)</p></li>
-<li><p>What was the longest run of steps where all steps were positive numbers. For example, in the sequence: 1,2,3,2,1,0,-1,-2,-1,-2,-1,0,1,2,3; the answer is 5 because the first five values were all positive, and this was the longest sequence of positive values. (1 point).</p></li>
+<li>Generate “random” strings of letters that are sampled from a distribution where letter occurrence probability is the same as natural English. Use the probabilities for each letter from this wikipedia article, or use your own estimates from the previous question (2 points).</li>
 </ol>
+<p>Confidence:</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Generate a random walk of 10,000 steps. In a random walk, you are simulating the process of randomly taking a step up or down, as if you are on an infinite staircase. At each step you flip a coin. If you get heads you go up one step, if you get tails you go down one step. Start on step 0, then simulate a random walk for 10,000 steps. Your vector should preserve the step number for each step. For example, if the the first three steps were all heads, then the vector would begin with 0,1,2,3, which indicates a single step up each time. Plot the first 1,000 steps. (1 point)</li>
+</ol>
+<p>Confidence:</p>
+<ol start="4" style="list-style-type: decimal">
+<li>What was the most positive and most negative step reached out of 10,000? (1 point)</li>
+</ol>
+<p>Confidence:</p>
+<ol start="5" style="list-style-type: decimal">
+<li>What was the longest run of steps where all steps were positive numbers. For example, in the sequence: 1,2,3,2,1,0,-1,-2,-1,-2,-1,0,1,2,3; the answer is 5 because the first five values were all positive, and this was the longest sequence of positive values. (1 point).</li>
+</ol>
+<p>Confidence:</p>
 
 
 
