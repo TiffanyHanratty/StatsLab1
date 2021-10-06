@@ -36,8 +36,21 @@ Confidence:10
 
 2. Generate “random” strings of letters that are sampled from a distribution where letter occurrence probability is the same as natural English. Use the probabilities for each letter from this wikipedia article, or use your own estimates from the previous question (2 points).
 
-```
+```{r}
+test_sample <- sample(x = final$lower_case, size = 5, replace=TRUE, prob = final$probabilities)
 
+my_letters <- sample(final$lower_case,50*5,replace=TRUE, prob = final$probabilities )
+
+my_strings <- matrix(my_letters, ncol=5)
+
+paste(my_strings[1,], collapse="")
+
+random_strings <-c()
+for(i in 1:dim(my_strings)[1]){
+  random_strings[i] <- paste(my_strings[i,], collapse="")
+}
+
+random_strings
 ```
 Confidence: 
 
