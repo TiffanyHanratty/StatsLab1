@@ -54,6 +54,7 @@ hist(sampling_distribution)
 length(sampling_distribution[sampling_distribution >= 12])/10000
 ```
 Yes, the proportion in question 4 is different from the proportion in question 3. The reason for this is because of the increased sample size. The increase in sample size allows for a larger number of score. Due to the higher concentration of scores close to the mean the proportion in question 4 is different than the proportion in question 3. 
+
 Confidence: 30
 
 5. You randomly sample 25 numbers from a normal distribution with mean = 10 and standard deviation = 20. You obtain a sample standard deviation of 15. You want to know the probability that you could have received a sample standard deviation of 15 or less.
