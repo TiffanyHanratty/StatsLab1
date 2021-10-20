@@ -28,7 +28,56 @@ Optional:
 - add one or two-tailed test options
 
 ```{r}
+group_one <- c(2,6,9,7,4)
+group_two <- c(4,8,7,3,2)
+
+randomization_test <- function(A, B, resamples = 1000){
+  
+  group_A_mean <- mean(A)
+  group_B_mean <- mean(B)
+  mean_difference <- group_A_mean - group_B_mean
+  
+  all_means <- c(A,B)
+  
+    possible_differences <- c()
+  for(i in 1:resamples){
+    resample <- sample(all_means)
+   new_A_mean <- mean(resample[1:length(A)])
+   new_B_mean <- mean(resample[(length(A)+1):length(all_means)])
+   possible_differences[i] <- new_A_mean-new_B_mean
+  }
+   
+    the_plot <- ggplot2::qplot(possible_differences)+
+  ggplot2::geom_histogram(color="orange")+
+  ggplot2::geom_vline(xintercept= mean_difference, color ="red")+
+  ggplot2::theme_classic()
+    
+    p_value <- length(possible_differences[possible_differences >= mean_difference])/resamples
+  
+  test_output <- list( A_mean = group_A_mean,
+                       B_mean = group_B_mean,
+                       difference = mean_difference,
+                       randomization = possible_differences,
+                       plot = the_plot,
+                       p_value = p_value)
+  
+  return(test_output)
+}
+
+randomization_test(A=group_one,B=group_two,resamples=1000)
+
 
 ```
-Confidence: 
+
+
+```{r}
+the_data <- read.csv("open_data/SchroederEpley2015data.csv", header = TRUE)
+
+library(dplyr)
+
+```
+
+
+
+
 
