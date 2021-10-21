@@ -91,7 +91,6 @@ randomization_test(A=group_one,B=group_two,resamples=1000)
 
 
 ```
-
 Confidence:20
 
 The mean for group A is 5.6 and the mean for group B is 4.8. This leaves us with a mean difference of 0.8. The p-value was 0.365, which means that 36.5% of the time there was a mean difference in the simulation that was larger than mean difference in the data.
