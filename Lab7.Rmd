@@ -18,8 +18,10 @@ binom.test(x = 30,
 
 
 ```
+Based on the data there is a 20.26% chance the test-taker received a 60% on the test by randomly guessing. I think this test score could be produced by randomly guessing, but I would consider it fairly unlikely. A 20.26% chance of the test-taker getting 60% on the test by randomly guessing just seems a bit low for me to think it would be highly probable they were just guessing on each answer. 
+Confidence: 75
 
-Confidence: 
+
 
 2. An examiner wants to make a TRUE/FALSE test, but is still deciding how many questions they will include. They want to make sure that it would be very difficult to simply randomly guess and be able to score any higher than 55% percent. How many questions would the examiner need to use to be confident that scores of 55% or higher were not produced by chance? (2 points)
 
@@ -29,8 +31,8 @@ binom.test(x = 165,
            p = .5,
            alternative="greater")
 ```
-
-Confidence:
+I think it would be a safe bet for the examiner to use 300 questions to insure scores of 55% or higher were not produced by chance. Using 300 questions would leave a 4.7% chance that a score of 55% or higher was obtained by chance. Considering this is quite a low percentage, and does not seem very likely to happen, I think the examiner should feel repetitively confident about the use of 300 questions. 
+Confidence:70
 
 3. A test has 5 TRUE/FALSE questions (each with one right answer) and 5 multiple choice questions with four choices each (each with only one right answer).
 
@@ -70,6 +72,6 @@ length(s_distribution[s_distribution >= 8])
 length(s_distribution[s_distribution >= 8])/10000
 ```
 
-Confidence: 
+Confidence: 55
 
 
