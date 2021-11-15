@@ -177,6 +177,89 @@ pre code {
 </ol>
 <p>Silver, A. M., Stahl, A. E., Loiotile, R., Smith-Flores, A. S., &amp; Feigenson, L. (2020). When Not Choosing Leads to Not Liking: Choice-Induced Preference in Infancy. Psychological Science, 0956797620954491.</p>
 <p>Obtain the data from the online repository, show your code for loading it into R, then conduct the same tests reported in Experiment 1 that the authors conducted. These include one binomial test, and two chi-square tests. Briefly report your re-analysis, and discuss whether you obtained the same values as the authors did (6 points).</p>
+<pre class="r"><code>the_data &lt;- read.csv(file=&quot;lab9/infant_choice_data.csv&quot;)
+
+library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>e1_data &lt;- the_data %&gt;%
+  filter(ExperimentNumber == &quot;1&quot;)
+
+# bin test
+
+sum_C &lt;- sum(e1_data$Infant.Chose.C)
+total_C &lt;- length(e1_data$Infant.Chose.C)
+
+(binomial_p &lt;- pbinom(q = total_C - sum_C,
+                     size = total_C,
+                     prob = .5,
+                     lower.tail = TRUE)*2)</code></pre>
+<pre><code>## [1] 0.0266037</code></pre>
+<pre class="r"><code># chi-sq for gender
+
+library(tidyr)
+
+gender_choice_table &lt;- e1_data %&gt;%
+  group_by(Gender, Infant.Chose.C) %&gt;%
+  summarize(counts = n()) %&gt;%
+  pivot_wider(names_from = c(Gender),
+              values_from = counts)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Gender&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>gender_choice_table &lt;- gender_choice_table[,2:3]
+
+(gender_Xsq &lt;- chisq.test(gender_choice_table))</code></pre>
+<pre><code>## Warning in chisq.test(gender_choice_table): Chi-squared approximation may be
+## incorrect</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  gender_choice_table
+## X-squared = 4.9416e-32, df = 1, p-value = 1</code></pre>
+<pre class="r"><code>  uncorrected_Xsq &lt;- sum((gender_Xsq$observed-gender_Xsq$expected)^2/gender_Xsq$expected)
+  
+  gender_Xsq_unc &lt;- pchisq(uncorrected_Xsq, 1, lower.tail = FALSE)
+  
+# chi-sq for age
+  
+age_table &lt;- e1_data %&gt;%
+    group_by(AgeMonths, Infant.Chose.C) %&gt;%
+    summarize(counts = n()) %&gt;% 
+    pivot_wider(names_from = c(AgeMonths),
+                values_from = counts)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;AgeMonths&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>  age_table[is.na(age_table)] &lt;- 0
+  age_table &lt;- as.matrix(age_table[,2:21])
+  (age_xs &lt;- chisq.test(age_table))</code></pre>
+<pre><code>## Warning in chisq.test(age_table): Chi-squared approximation may be incorrect</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  age_table
+## X-squared = 18.244, df = 19, p-value = 0.5062</code></pre>
+<pre class="r"><code>  age_xs$observed</code></pre>
+<pre><code>##      10.41 10.58 10.87 11.1 11.2 11.37 11.56 11.66 11.93 12.22 14.59 14.95
+## [1,]     1     1     1    1    1     1     1     1     1     0     0     1
+## [2,]     0     0     0    0    0     0     0     1     0     1     1     0
+##      16.03 16.66 17.02 19.25 19.35 19.38 19.55 20.01
+## [1,]     1     1     0     1     0     1     1     1
+## [2,]     0     0     1     0     1     0     0     0</code></pre>
+<pre class="r"><code>  age_xs$expected</code></pre>
+<pre><code>##          10.41     10.58     10.87      11.1      11.2     11.37     11.56
+## [1,] 0.7619048 0.7619048 0.7619048 0.7619048 0.7619048 0.7619048 0.7619048
+## [2,] 0.2380952 0.2380952 0.2380952 0.2380952 0.2380952 0.2380952 0.2380952
+##          11.66     11.93     12.22     14.59     14.95     16.03     16.66
+## [1,] 1.5238095 0.7619048 0.7619048 0.7619048 0.7619048 0.7619048 0.7619048
+## [2,] 0.4761905 0.2380952 0.2380952 0.2380952 0.2380952 0.2380952 0.2380952
+##          17.02     19.25     19.35     19.38     19.55     20.01
+## [1,] 0.7619048 0.7619048 0.7619048 0.7619048 0.7619048 0.7619048
+## [2,] 0.2380952 0.2380952 0.2380952 0.2380952 0.2380952 0.2380952</code></pre>
+<p>Confidence:</p>
 
 
 
