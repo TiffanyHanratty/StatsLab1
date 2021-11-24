@@ -19,7 +19,6 @@ The re-analysis should focus only on Experiment 3. There are three main goals
 1. Reproduce as much of the analysis as possible using only paired-sample t-tests. Note, the authors reported a 2x2 repeated measures ANOVA, but consider how the same questions could be answered by t-tests (2 points)
 
 ```{r}
-library(papaja)
 library(dplyr)
 library(ggplot2)
  
@@ -34,7 +33,8 @@ all_data <- read.csv("open_data/stroop_stand.csv")
                         paired = TRUE))
 
 ```
-Confidence:
+
+Confidence: 45
 
 2. Reproduce a graph of the means, like shown in the paper (2 points)
 
@@ -52,6 +52,8 @@ overall_means <- stroop_df %>%
             summarise(mean_RT = mean(RTs),
                       SEMRT = sd(RTs)/sqrt(length(RTs)))
 
+knitr::kable(overall_means)
+
 ggplot(overall_means, aes(x=Posture, 
                           y=mean_RT, 
                           group=Congruency, 
@@ -66,7 +68,7 @@ ggplot(overall_means, aes(x=Posture,
   coord_cartesian(ylim=c(500,1000))
 
 ```
-Confidence:
+Confidence: 35
 
 3. Present a power-curve analysis for the design. (2 points)
 
@@ -76,14 +78,9 @@ prop_significant <-c()
 
 for(i in 1:length(effect_sizes)){
   sim_ps <- replicate(1000, t.test(replicate(50, rnorm(1, effect_sizes[i], 1)),
-                                   mu = 0)$p.value,
-                                   
-                              
+                                   mu = 0)$p.value)
   prop_significant[i] <- length(sim_ps[sim_ps < .05])/1000
-  
 }
-
-
 
 plot_df <- data.frame(effect_sizes,
                       prop_significant)
@@ -97,7 +94,7 @@ ggplot(plot_df, aes(x=effect_sizes,y=prop_significant))+
 
 
 ```
-Confidence:
+Confidence: 35
 
 
 
