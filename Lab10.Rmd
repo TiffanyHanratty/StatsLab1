@@ -12,7 +12,6 @@ knitr::opts_chunk$set(echo = TRUE)
 1. Your task is to obtain the data from the following paper and conduct a reproducible analysis of their results.
 Rosenbaum, D., Mama, Y., & Algom, D. (2017). Stand by Your Stroop: Standing Up Enhances Selective Attention and Cognitive Control. Psychological science, 28(12), 1864-1867.
 
-Note, the paper, the data, and an existing reproducible analysis of this data is available at https://crumplab.github.io/statisticsLab/lab-10-factorial-anova.html#important-stuff-4
 
 The re-analysis should focus only on Experiment 3. There are three main goals
 
