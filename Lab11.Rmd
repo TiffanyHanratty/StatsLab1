@@ -52,7 +52,7 @@ sort(Y, decreasing = TRUE)
 sum(sort(X)*sort(Y, decreasing = TRUE))
 
 ```
-Confidence:
+Confidence: 85
 
 B. the largest possible sum of products (1 point)
 
@@ -61,7 +61,7 @@ sum(sort(X)*sort(Y))
 
 ```
 
-Confidence: 
+Confidence: 90
 
 
 
