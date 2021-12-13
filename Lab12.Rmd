@@ -1,0 +1,27 @@
+---
+title: "Lab 12"
+author: "Tiffany Hanratty"
+date: "12/15/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Should you do a linear regression on this data? Explain.
+
+```{r}
+Y <- c(10,9,8,7,6,5,4,3,2,1,2,3,4,5,6,7,8,9,10)
+X <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19)
+
+plot(X,Y)
+
+```
+
+Based on the data provided, I would have to conclude a linear regression would not be optimal for this data. This data is presented as a “V” shape, meaning it is not linear. The correlation for this data would be equal to zero considering there is no linear relationship to this data. There is a relationship between X and Y, though it is in  the shape of a “V”. This would lead to the conclusion that there is no relationship between the data if a linear regression were performed because the data is not linear. For these reasons a linear regression should not be performed on this data set. 
+
+
+Confidence: 95
+
+
