@@ -1,0 +1,220 @@
+---
+title             : "Reproduction of the Analysis of Holmes, To, & Johnsrude (2021)"
+shorttitle        : "Voice Familiarity"
+
+author: 
+  - name          : "Tiffany Hanratty"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "2900 Bedford Ave"
+    email         : "TIFFANY.HANRATTY66@bcmail.cuny.edu"
+
+affiliation:
+  - id            : "1"
+    institution   : "Brooklyn College"
+  
+
+authornote: |
+  Tiffany Hanratty, Department of Psychology, Brooklyn College.
+
+abstract: |
+  This semester project works to recreate the statistical analysis portion of a study by Holmes, To, & Johnsrude (2012). This analysis was run on the training portion of the study. Three paired t-tests were used to analyze the data in order to help determine significance when comparing different groups. The training portion of this paper analyzes 3 groups: the most familiar condition, the moderately familiar condition, and the least familiar condition (Holmes, To, and Johnsrude, 2021). 
+  
+  <!-- https://tinyurl.com/ybremelq -->
+  
+keywords          : "Auditory perception, reproducibility, attention, speech perception, memory, learning "
+
+
+bibliography      : ["r-references.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
+---
+
+```{r setup, include = FALSE}
+library("papaja")
+r_refs("r-references.bib")
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+
+The authors of this study examined how different lengths of voice exposure relate to voice intelligibility and voice recognition (Holmes, To, & Johnsrude, 2021). The study consisted of 50 adult participants, and was broken up into four different parts. This data reanalysis is focused on the training portion of this study. The training portion analyses voice recognition performance in three categorize: most familiar, moderately familiar, and least familiar voice. Information on the sections regarding familiarization, the explicit-recognition test, and the speech-intelligibility test can be found in the complete study by Holmes, To, & Johnsrude (2021).
+The data for this analysis reduction can be found at, and were downloaded from https://osf.io/7kdyc/. 
+
+
+# Methods
+
+
+## Participants
+
+This experiment contained a total of 50 participants which were all aged 18 to 28 (Holmes, To, & Johnsrude, 2021).
+
+## Material
+
+Details pertaining to the acoustic stimuli used in this experiment can be found in the study conducted by Holmes, To, & Johnsrude (2021). 
+
+
+## Procedure
+
+This experiment consisted of familiarization, training, an explicit-recognition test, and a speech-intelligibility test (Holmes, To, and Johnsrude, 2021). This reanalysis pertains to the training portion of this study. The training portion of this study consisted of participants hearing multiple sentences which could be spoken in one of three categories, most familiar, moderately familiar, or least familiar. Some participants (N = 25) heard training sentences alone, while other participants (N = 25) heard the sentences with background noise in the form of babbling. Participants were asked after each sentence to choose the name of the speaker of the sentence, which corresponds to the familiarity category. Participants were provided with immediate feedback as to whether or not they were correct. Detailed information on the remaining three sections of this study can be found in Holmes, To, & Johnsrude (2021).
+
+
+# Results
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+library(data.table)
+library(dplyr)
+library(ggplot2)
+
+
+all_data <- read.csv("C:/Users/Tiffany Hanratty/Desktop/Training_PercentCorrect_(n=50).csv")
+
+setwd
+
+
+(match_1 <- t.test(all_data$fam_1,
+                  all_data$fam_2,
+                  paired = TRUE))
+
+```
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+
+(match_2 <- t.test(all_data$fam_1,
+                  all_data$fam_3,
+                  paired = TRUE))
+
+```
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+
+
+(match_3 <- t.test(all_data$fam_2,
+                  all_data$fam_3,
+                  paired = TRUE))
+
+```
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+library(tidyr)
+
+fam_df <- all_data %>%
+  pivot_longer(cols = 1:3,
+               names_to = c("name", "value"),
+               names_sep = "_",
+               values_to = "RTs")
+  
+
+
+overall_means <- fam_df %>%
+  group_by(value, name) %>%
+  summarise(meanRT = mean(RTs),
+            SEMRT = (sd(RTs)/sqrt(length(RTs))))
+
+knitr::kable(overall_means)
+
+```
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+ggplot(overall_means, aes(x=name,
+                          y=meanRT, 
+                          group=value,
+                          fill=value))+
+  geom_bar(stat="identity",position="dodge")+
+  theme_classic(base_size=12)+
+  ylab("Mean Voice Familiarity Performance by group")+
+  geom_errorbar(aes(ymin=meanRT-SEMRT,
+                    ymax=meanRT+SEMRT),
+                position=position_dodge(width=0.9),
+                width=.2,
+                color="black")+
+  coord_cartesian(ylim=c(3,100))
+
+```
+
+## Hand Reporting
+
+A paired t-test was used to compare familiarity conditions with performance. Better performance was seen in the most familiar condition  compared to the moderately familiar condition, t(49) = 4.29, p < .001 (Holmes, To, and Johnsrude, 2021). There was also better performance seen in the most familiar condition compared to the least familiar condition,  t(49) = 3.56, p = .001 (Holmes, To, and Johnsrude, 2021). There was not a significant difference found in the moderately familiar group compared to the least familiar group, t(49) = 0.16, p = .88. The confidence interval values were not able to be reproduced in this reanalysis. 
+
+
+## Papaja Reporting
+
+A paired t-test was used to compare familiarity conditions with performance. Better performance was seen in the most familiar condition compared to the moderately familiar condition, `r apa_print(match_1)$full_result` (Holmes, To, and Johnsrude, 2021). There was also better performance seen in the most familiar condition compared to the least familiar condition,  `r apa_print(match_2)$full_result` (Holmes, To, and Johnsrude, 2021). There was not a significant difference found in the moderately familiar group compared to the least familiar group, `r apa_print(match_3)$full_result`. The confidence interval values were not able to be reproduced in this reanalysis. 
+
+
+# Discussion
+
+The analysis which was reported by Holmes, To, & Johnsrude (2021) was partially successfully reproduced in this reanalysis. Both the t-test values and the p-values in this reanalysis match the reported values in Holmes, To, & Johnsrude (2021). The confidence interval values were not able to be replicated in this reanalysis. A simulation based power analysis will be completed in the following section.
+
+## Simulation-based power analysis
+
+This study ran three t-tests comparing performance between different groups of voice familiarity. The t-tests consisted of performance comparison between the most familiar voice compared to a moderately familiar voice, the most familiar voice compared to the least familiar voice, and the moderately familiar voice compared to the least familiar voice. 
+
+This power analysis was conducted in RStudio. For this power analysis a variable was generated in order to indicate the possible occurring effect sizes in this study. A simulation was run for each possible effect size using 1000 simulated experiments. Values were sampled using an approximately normal distribution. The replicated values’ mean is set to be equal to the effect size. Fifty values were run for this distribution to emulate the fifty participants in the experiment. Every time this simulated test is conducted, a p-value is measured. This test will then analyze how many times these simulated experiments produced a p-value at a significance value of p < 0.05.
+
+Based on the findings of this power curve, when the effect size is at approximately 0.7, a design similar to this studies design will detect an effect at p < 0.05 close to 100% of the time. If the power of a study needs to be increased, a relatively simple way to increase statistical power would be to increase the sample size. 
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+effect_size <- seq(0,1.5,.1)
+prop_significant <-c()
+
+for(i in 1:length(effect_size)){
+  sim_ps <- replicate(1000, t.test(replicate(50, rnorm(1, effect_size[i],1)),
+                                   mu = 0)$p.value)
+  prop_significant[i] <- length(sim_ps[sim_ps < .05])/1000
+}
+
+plot_df <- data.frame(effect_size,
+                      prop_significant)
+
+ggplot(plot_df, aes(x=effect_size,y=prop_significant))+
+  geom_line()+
+  geom_point()+
+  scale_x_continuous(breaks=seq(0,1.5,.1))+
+  scale_y_continuous(breaks=seq(0,1,.1))+
+  ylab("proportion significant")
+
+
+```
+
+
+\newpage
+
+# References
+
+Holmes, E., To, G., & Johnsrude, I. S. (2021). How Long Does
+ It Take for a Voice to Become Familiar? Speech
+ Intelligibility and Voice Recognition Are Differentially
+ Sensitive to Voice Training. Psychological science, 32(6),
+ 903–915. https://doi.org/10.1177/0956797621991137
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id="refs" custom-style="Bibliography"></div>
+\endgroup

@@ -1,0 +1,102 @@
+---
+title: "Reproducible Report"
+author: "Tiffany Hanratty"
+date: "12/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+This report consists of a re-analysis of the training portion found in Holmes, To, & Johnsrude (2021).
+
+The article citation is: Holmes, E., To, G., & Johnsrude, I. S. (2021). How Long Does It Take for a Voice to Become Familiar? Speech Intelligibility and Voice Recognition Are Differentially Sensitive to Voice Training. Psychological science, 32(6), 903–915. https://doi.org/10.1177/0956797621991137
+
+
+The data for this reproducible report were downloaded from https://osf.io/7kdyc/
+
+
+## Re-analysis
+
+```{r}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(papaja)
+
+all_data <- read.csv("SemesterProject/Training_PercentCorrect_(n=50).csv")
+
+(match_1 <- t.test(all_data$fam_1,
+                  all_data$fam_2,
+                  paired = TRUE))
+
+(match_2 <- t.test(all_data$fam_1,
+                  all_data$fam_3,
+                  paired = TRUE))
+
+(match_3 <- t.test(all_data$fam_2,
+                  all_data$fam_3,
+                  paired = TRUE))
+
+                
+
+
+```
+
+## Table of Means
+
+```{r}
+library(tidyr)
+
+fam_df <- all_data %>%
+  pivot_longer(cols = 1:3,
+               names_to = c("name", "value"),
+               names_sep = "_",
+               values_to = "RTs")
+  
+
+
+overall_means <- fam_df %>%
+  group_by(value, name) %>%
+  summarise(meanRT = mean(RTs),
+            SEMRT = (sd(RTs)/sqrt(length(RTs))))
+
+knitr::kable(overall_means)
+
+```
+
+## Graph of Means
+
+```{r}
+ggplot(overall_means, aes(x=name,
+                          y=meanRT, 
+                          group=value,
+                          fill=value))+
+  geom_bar(stat="identity",position="dodge")+
+  theme_classic(base_size=12)+
+  ylab("Mean Voice Familiarity Performance by group")+
+  geom_errorbar(aes(ymin=meanRT-SEMRT,
+                    ymax=meanRT+SEMRT),
+                position=position_dodge(width=0.9),
+                width=.2,
+                color="black")+
+  coord_cartesian(ylim=c(3,100))
+
+
+```
+
+## Results 
+
+A paired t-test was used to compare familiarity conditions with performance. Better performance was seen in the most familiar condition  compared to the moderately familiar condition, t(49) = 4.29, p < .001 (Holmes, To, and Johnsrude, 2021). There was also better performance seen in the most familiar condition compared to the least familiar condition,  t(49) = 3.56, p = .001 (Holmes, To, and Johnsrude, 2021). There was not a significant difference found in the moderately familiar group compared to the least familiar group, t(49) = 0.16, p = .88. The confidence interval values were not able to be reproduced in this reanalysis. 
+
+
+
+## Discussion
+
+In this re-analysis of the triang portion of Holmes, To, & Johnsrude (2021), t-test values, as well as, p-values for each comparison condition matched those reopeted in the original article. 
+
+
+
+
